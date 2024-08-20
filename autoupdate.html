@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Auto Update</title>
+    <style>
+        .popup {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #444;
+            color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <script>
+        const { ipcRenderer } = require('electron');
+
+        function showPopup(message) {
+            var popup = document.createElement('div');
+            popup.classList.add('popup');
+            popup.innerHTML = '<p>' + message + '</p>';
+            popup.style.width = '500px'; // Adjusted to a more reasonable width
+            document.body.appendChild(popup);
+            setTimeout(() => {
+                popup.remove();
+            }, 3000);
+        }
+
+        ipcRenderer.on('showPopup', (event, message) => {
+            showPopup(message);
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            ipcRenderer.send('loading-completed');
+        });
+    </script>
+</body>
+</html>
+
